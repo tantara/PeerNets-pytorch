@@ -1,0 +1,31 @@
+Setting GPU: ['0']
+=================FLAGS==================
+batch_size: 128
+epochs: 10
+optimizer: adam
+lr: 0.001
+wd: 0.0001
+momentum: 0.9
+has_pr: False
+gpu: ['0']
+ngpu: 1
+seed: 117
+log_interval: 100
+test_interval: 5
+logdir: src/mnist/log/default
+data_root: /tmp/public_dataset/pytorch/
+decreasing_lr: 100
+========================================
+Sequential(
+  (conv1): Conv2d(1, 6, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (pool1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv2): Conv2d(6, 16, kernel_size=(5, 5), stride=(1, 1))
+  (pool2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+)
+Sequential(
+  (fc1): Linear(in_features=400, out_features=120, bias=True)
+  (fc2): Linear(in_features=120, out_features=84, bias=True)
+  (fc3): Linear(in_features=84, out_features=10, bias=True)
+)
+decreasing_lr: [100]
+Total Elapse: 2.25, Best Result: 0.000%

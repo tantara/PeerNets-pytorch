@@ -115,3 +115,6 @@ dmypy.json
 .pyre/
 
 run.sh.dev
+log
+models
+*.txt

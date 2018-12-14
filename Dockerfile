@@ -1,15 +1,20 @@
-FROM pytorch/pytorch:1.0-cuda10.0-cudnn7-runtime
+FROM floydhub/pytorch:1.0.0-gpu.cuda9cudnn7-py3.38 
 MAINTAINER Taekmin Kim <tantara.tm@gmail.com>
 
-RUN pip install cython cffi opencv-python scipy easydict matplotlib pyyaml tqdm
-RUN pip install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric
-RUN apt-get update --fix-missing
+RUN apt-get update
 RUN apt-get install -y screen htop git vim
+
+RUN pip install cython
+RUN pip install pip --upgrade
+RUN pip install cffi opencv-python scipy easydict matplotlib pyyaml tqdm=4.19.9
+RUN pip install torchvision
+RUN pip install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric
 
 ENV APP_PATH /base
 RUN mkdir -p $APP_PATH
 WORKDIR $APP_PATH
 
+# ssh
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 RUN echo 'root:pytorchkr' | chpasswd

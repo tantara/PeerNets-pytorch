@@ -8,7 +8,7 @@ Adversarial Attack, Adversarial Example, Graph Convolutional Network(GCN)
 
 ## Environement
 
-* Docker 18.06
+* Docker 18.06 on Ubuntu 16.04
 * PyTorch 1.0
 
 
