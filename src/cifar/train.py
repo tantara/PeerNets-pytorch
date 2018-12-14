@@ -12,8 +12,8 @@ import dataset
 import model
 
 
-parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-parser.add_argument('--type', default='mnist', help='mnist')
+parser = argparse.ArgumentParser(description='PyTorch CIFAR-X Example')
+parser.add_argument('--type', default='cifar10', help='cifar10|cifar100')
 parser.add_argument('--batch_size', type=int, default=128, help='input batch size for training (default: 64)')
 parser.add_argument('--epochs', type=int, default=100, help='number of epochs to train (default: 10)')
 parser.add_argument('--optimizer', default='adam', help='optimizer (default: adam)')
@@ -54,11 +54,14 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
-# data loader
-train_loader, test_loader = dataset.get(batch_size=args.batch_size, data_root=args.data_root, num_workers=1)
-
-# model
-model = model.mnist()
+# data loader and model
+assert args.type in ['cifar10', 'cifar100'], args.type
+if args.type == 'cifar10':
+    train_loader, test_loader = dataset.get10(batch_size=args.batch_size, num_workers=1)
+    model = model.cifar10()
+else:
+    train_loader, test_loader = dataset.get100(batch_size=args.batch_size, num_workers=1)
+    model = model.cifar100()
 model = torch.nn.DataParallel(model, device_ids= range(args.ngpu))
 if args.cuda:
     model.cuda()

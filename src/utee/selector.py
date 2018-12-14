@@ -19,7 +19,7 @@ def mnist(cuda=True, model_root=None):
 def cifar10(cuda=True, model_root=None):
     print("Building and initializing cifar10 parameters")
     from cifar import model, dataset
-    m = model.cifar10(128, pretrained=os.path.join(model_root, 'cifar10.pth'))
+    m = model.cifar10(pretrained=os.path.join(model_root, 'cifar10.pth'))
     if cuda:
         m = m.cuda()
     return m, dataset.get10
@@ -27,7 +27,7 @@ def cifar10(cuda=True, model_root=None):
 def cifar100(cuda=True, model_root=None):
     print("Building and initializing cifar100 parameters")
     from cifar import model, dataset
-    m = model.cifar100(128, pretrained=os.path.join(model_root, 'cifar100.pth'))
+    m = model.cifar100(pretrained=os.path.join(model_root, 'cifar100.pth'))
     if cuda:
         m = m.cuda()
     return m, dataset.get100

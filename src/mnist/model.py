@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from utee import misc
 print = misc.logger.info
@@ -22,8 +21,9 @@ class LeNet5(nn.Module):
             ('fc2', nn.Linear(120, 84)),
             ('fc3', nn.Linear(84, 10)),
         ]))
-        print(self.features)
-        print(self.classifier)
+
+        for layer in [self.features, self.classifier]:
+            print(layer)
 
     def forward(self, x):
         x = self.features.forward(x)
