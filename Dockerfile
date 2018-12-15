@@ -1,6 +1,7 @@
 FROM floydhub/pytorch:1.0.0-gpu.cuda9cudnn7-py3.38 
 MAINTAINER Taekmin Kim <tantara.tm@gmail.com>
 
+ENV LC_ALL C
 ENV APP_PATH /base
 
 # for docker hub
@@ -10,7 +11,7 @@ COPY . $APP_PATH
 
 WORKDIR $APP_PATH
 
-RUN wget -O models.tar.gz https://dl.dropbox.com/s/3228ih441mbcun6/models.tar.gz
+RUN wget -O models.tar.gz https://dl.dropbox.com/s/aopkbovd8e5meuc/models.tar.gz
 RUN tar -xvzf models.tar.gz
 
 RUN apt-get update
@@ -34,8 +35,6 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
-
-ENTRYPOINT ["/base"]
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]

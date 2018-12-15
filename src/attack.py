@@ -46,9 +46,9 @@ print(model_raw)
 # generate noise
 train_ds, _ = ds_fetcher(args.n_sample, data_root=args.data_root, train=True, fix_shuffle=True, input_size=args.input_size)
 
-noise_path = os.path.join(args.model_root, '{:s}-noise{:.1f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
-fr_path = os.path.join(args.model_root, '{:s}-fr{:.1f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
-eps_path = os.path.join(args.model_root, '{:s}-eps{:.1f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
+noise_path = os.path.join(args.model_root, '{:s}-noise{:.2f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
+fr_path = os.path.join(args.model_root, '{:s}-fr{:.2f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
+eps_path = os.path.join(args.model_root, '{:s}-eps{:.2f}-{:d}.npy'.format(args.type, args.rho, args.n_sample))
 if os.path.exists(noise_path):
     print("Load noise from "+noise_path)
     noise = np.load(noise_path)

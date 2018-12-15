@@ -12,4 +12,4 @@ nvidia-docker run -it -d \
   -p $TFBOARD_PORT:8008 \
   -v $BASE_PATH:/base \
   --shm-size 16G \
-  --name $PRJ_NAME peernets-pytorch
+  --name $PRJ_NAME tantara/peernets-pytorch
