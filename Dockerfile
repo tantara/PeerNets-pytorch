@@ -10,6 +10,9 @@ COPY . $APP_PATH
 
 WORKDIR $APP_PATH
 
+RUN wget -O models.tar.gz https://dl.dropbox.com/s/3228ih441mbcun6/models.tar.gz
+RUN tar -xvzf models.tar.gz
+
 RUN apt-get update
 RUN apt-get install -y screen htop git vim
 
