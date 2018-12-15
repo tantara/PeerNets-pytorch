@@ -128,20 +128,6 @@ def eval_model(model, ds, n_sample=None, ngpu=1):
     from torch import nn
     from torch.autograd import Variable
 
-    class ModelWrapper(nn.Module):
-        def __init__(self, model):
-            super(ModelWrapper, self).__init__()
-            self.model = model
-            self.mean = [0.485, 0.456, 0.406]
-            self.std = [0.229, 0.224, 0.225]
-
-        def forward(self, input):
-            input.data.div_(255.)
-            input.data[:, 0, :, :].sub_(self.mean[0]).div_(self.std[0])
-            input.data[:, 1, :, :].sub_(self.mean[1]).div_(self.std[1])
-            input.data[:, 2, :, :].sub_(self.mean[2]).div_(self.std[2])
-            return self.model(input)
-
     correct1, correct5 = 0, 0
     n_passed = 0
     model = model.eval()
@@ -150,6 +136,85 @@ def eval_model(model, ds, n_sample=None, ngpu=1):
     n_sample = len(ds) if n_sample is None else n_sample
     for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):
         n_passed += len(data)
+        data =  Variable(torch.FloatTensor(data)).cuda()
+        indx_target = torch.LongTensor(target)
+        output = model(data)
+        bs = output.size(0)
+        idx_pred = output.data.sort(1, descending=True)[1]
+
+        idx_gt1 = indx_target.expand(1, bs).transpose_(0, 1)
+        idx_gt5 = idx_gt1.expand(bs, 5)
+
+        correct1 += float(idx_pred[:, :1].cpu().eq(idx_gt1).sum())
+        correct5 += float(idx_pred[:, :5].cpu().eq(idx_gt5).sum())
+
+        if idx >= n_sample - 1:
+            break
+
+    acc1 = correct1 * 1.0 / n_passed
+    acc5 = correct5 * 1.0 / n_passed
+    return acc1, acc5
+
+def generate_noise(model, ds, rho, input_size, n_sample=None, ngpu=1, once=False):
+    import tqdm
+    import torch
+    from utee.universal_perturbation import UniversalPerturbation
+    from utee.pytorch_classifiers import PyTorchClassifier
+
+    max_iter = 20 # default: 20
+    norm = 2 # or 1: L1, 2: L2, and np.inf
+    delta = 0.05 # default: 0.2
+
+    n_sample = len(ds) if n_sample is None else n_sample
+    n_total = 0
+    eps_total = 0.0
+    for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):
+        n_total += len(data)
+
+        data = data.reshape((data.shape[0], -1))
+        l2_norm = np.linalg.norm(data, axis=1)
+        l2_sum = l2_norm.sum()
+        eps_total += l2_sum
+
+        if idx >= n_sample - 1:
+            break
+
+    eps = float(eps_total / n_total)
+    print('eps : {:2f}'.format(eps))
+
+    model = model.eval()
+    #ptc = PyTorchClassifier((-1, 1), model, None, None, (1, input_size, input_size), 10)
+    ptc = PyTorchClassifier((0, 1), model, None, None, (1, input_size, input_size), 10)
+    up = UniversalPerturbation(ptc, attacker='deepfool', attacker_params={"max_iter": 50}, norm=norm, eps=rho*eps, max_iter=max_iter, delta=delta)
+
+    n_sample = len(ds) if n_sample is None else n_sample
+    for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):
+        data_adv = up.generate(data.numpy())
+        noise = up.v
+        fooling_rate = up.fooling_rate
+
+        if once or idx >= n_sample - 1:
+            break
+
+    return noise, fooling_rate, eps
+
+def attack_model(model, ds, noise, n_sample=None, ngpu=1):
+    import tqdm
+    import torch
+    from torch import nn
+    from torch.autograd import Variable
+
+    correct1, correct5 = 0, 0
+    n_passed = 0
+    model = model.eval()
+    model = torch.nn.DataParallel(model, device_ids=range(ngpu)).cuda()
+
+    noise = torch.from_numpy(noise)
+
+    n_sample = len(ds) if n_sample is None else n_sample
+    for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):
+        n_passed += len(data)
+        data += noise
         data =  Variable(torch.FloatTensor(data)).cuda()
         indx_target = torch.LongTensor(target)
         output = model(data)

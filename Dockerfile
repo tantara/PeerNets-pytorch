@@ -9,6 +9,7 @@ RUN pip install pip --upgrade
 RUN pip install cffi opencv-python scipy easydict matplotlib pyyaml tqdm=4.19.9
 RUN pip install torchvision
 RUN pip install torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric
+RUN pip install adversarial-robustness-toolbox
 
 ENV APP_PATH /base
 RUN mkdir -p $APP_PATH

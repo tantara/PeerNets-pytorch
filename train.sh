@@ -1,7 +1,7 @@
 #!/bin/bash
 
-EXP=${1} # lenet5, pr-lenet-5, resnet32, pr-resnet32, resnet110, pr-resnet110
-TRAIN_GPU_ID=${2}
+TRAIN_GPU_ID=${1}
+EXP=${2} # lenet5, pr-lenet-5, resnet32, pr-resnet32, resnet110, pr-resnet110
 
 # Experiment: LeNet-5
 if [ "${EXP}" == "lenet5" ]; then
@@ -24,6 +24,7 @@ if [ "${EXP}" == "lenet5" ]; then
     --lr 0.001 \
     --wd 0.0001 \
     --has_pr true
+fi
 
 # Experiment: ResNet-32
 if [ "${EXP}" == "resnet32" ]; then

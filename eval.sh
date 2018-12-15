@@ -1,7 +1,7 @@
 #!/bin/bash
 
-EXP=${1} # lenet5, pr-lenet-5, resnet32, pr-resnet32, resnet110, pr-resnet110
-EVAL_GPU_ID=${2}
+EVAL_GPU_ID=${1}
+EXP=${2} # lenet5, pr-lenet-5, resnet32, pr-resnet32, resnet110, pr-resnet110
 
 if [ "${EXP}" == "lenet5" ]; then
   CUDA_VISIBLE_DEVICES=$EVAL_GPU_ID PYTHONPATH=/base/src:$PYTHONPATH \

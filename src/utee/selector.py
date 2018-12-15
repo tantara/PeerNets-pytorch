@@ -1,5 +1,6 @@
-from utee import misc
 import os
+
+from utee import misc
 
 print = misc.logger.info
 
