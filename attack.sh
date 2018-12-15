@@ -36,6 +36,7 @@ if [ "${EXP}" == "resnet110" ]; then
     --input_size 32 \
     --clip_min -1 \
     --clip_max 1 \
+    --n_classes 100 \
     --n_sample $N_SAMPLE \
     --rho $RHO
 fi

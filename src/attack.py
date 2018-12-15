@@ -20,6 +20,7 @@ parser.add_argument('--data_root', default='/tmp/public_dataset/pytorch/', help=
 parser.add_argument('--input_size', type=int, default=224, help='input size of image')
 parser.add_argument('--clip_min', type=int, default=0, help='minimum clipping value')
 parser.add_argument('--clip_max', type=int, default=1, help='maximum clipping value')
+parser.add_argument('--n_classes', type=int, default=10, help='maximum clipping value')
 parser.add_argument('--n_sample', type=int, default=100, help='number of samples to infer the scaling factor')
 parser.add_argument('--rho', type=float, default=1.0, help='levels of perturbation')
 args = parser.parse_args()
@@ -54,7 +55,7 @@ if os.path.exists(noise_path):
     fooling_rate = np.load(fr_path)
     eps = np.load(eps_path)
 else:
-    noise, fooling_rate, eps = misc.generate_noise(model_raw, train_ds, rho=args.rho, input_size=args.input_size, ngpu=args.ngpu, once=True, clip_min=args.clip_min, clip_max=args.clip_max)
+    noise, fooling_rate, eps = misc.generate_noise(model_raw, train_ds, rho=args.rho, input_size=args.input_size, ngpu=args.ngpu, once=True, clip_min=args.clip_min, clip_max=args.clip_max, n_classes=args.n_classes)
     print("Save noise , fooling_rate, eps to eg., "+noise_path)
     np.save(noise_path, noise)
     np.save(fr_path, fooling_rate)
