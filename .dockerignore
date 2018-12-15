@@ -1,0 +1,24 @@
+.git
+.ipynb_checkpoints/*
+/notebooks/*
+/unused/*
+Dockerfile
+.DS_Store
+.gitignore
+README.md
+env.*
+/devops/*
+
+# To prevent storing dev/temporary container data
+*.csv
+/tmp/*
+
+*.swo
+*.swp
+
+log
+models
+models_backup
+batch-attack.sh
+
+run.sh.dev

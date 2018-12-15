@@ -12,6 +12,8 @@ if [ "${EXP}" == "lenet5" ]; then
     python3 src/attack.py \
     --type mnist \
     --input_size 28 \
+    --clip_min 0 \
+    --clip_max 1 \
     --n_sample $N_SAMPLE \
     --rho $RHO
 fi
@@ -21,6 +23,8 @@ if [ "${EXP}" == "resnet32" ]; then
     python3 src/attack.py \
     --type cifar10 \
     --input_size 32 \
+    --clip_min -1 \
+    --clip_max 1 \
     --n_sample $N_SAMPLE \
     --rho $RHO
 fi
@@ -30,6 +34,8 @@ if [ "${EXP}" == "resnet110" ]; then
     python3 src/attack.py \
     --type cifar100 \
     --input_size 32 \
+    --clip_min -1 \
+    --clip_max 1 \
     --n_sample $N_SAMPLE \
     --rho $RHO
 fi

@@ -155,7 +155,7 @@ def eval_model(model, ds, n_sample=None, ngpu=1):
     acc5 = correct5 * 1.0 / n_passed
     return acc1, acc5
 
-def generate_noise(model, ds, rho, input_size, n_sample=None, ngpu=1, once=False):
+def generate_noise(model, ds, rho, input_size, clip_min=0, clip_max=1, n_sample=None, ngpu=1, once=False):
     import tqdm
     import torch
     from utee.universal_perturbation import UniversalPerturbation
@@ -172,6 +172,7 @@ def generate_noise(model, ds, rho, input_size, n_sample=None, ngpu=1, once=False
         n_total += len(data)
 
         data = data.reshape((data.shape[0], -1))
+        data *= 255
         l2_norm = np.linalg.norm(data, axis=1)
         l2_sum = l2_norm.sum()
         eps_total += l2_sum
@@ -183,9 +184,8 @@ def generate_noise(model, ds, rho, input_size, n_sample=None, ngpu=1, once=False
     print('eps : {:2f}'.format(eps))
 
     model = model.eval()
-    #ptc = PyTorchClassifier((-1, 1), model, None, None, (1, input_size, input_size), 10)
-    ptc = PyTorchClassifier((0, 1), model, None, None, (1, input_size, input_size), 10)
-    up = UniversalPerturbation(ptc, attacker='deepfool', attacker_params={"max_iter": 50}, norm=norm, eps=rho*eps, max_iter=max_iter, delta=delta)
+    ptc = PyTorchClassifier((clip_min, clip_max), model, None, None, (1, input_size, input_size), 10)
+    up = UniversalPerturbation(ptc, attacker='deepfool', attacker_params={"max_iter": 100}, norm=norm, eps=rho*eps, max_iter=max_iter, delta=delta)
 
     n_sample = len(ds) if n_sample is None else n_sample
     for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):

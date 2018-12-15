@@ -20,10 +20,40 @@ Adversarial Attack, Adversarial Example, Graph Convolutional Network(GCN)
 
 ## Experiments
 
-* LeNet5 on MNIST
-* ResNet32 on CIFAR10
-* ResNet110 on CIFAR100
+- [x] LeNet5 on MNIST
+- [x] ResNet32 on CIFAR10
+- [x] ResNet110 on CIFAR100
+- [ ] PR-LeNet5 on MNIST
+- [ ] PR-ResNet32 on CIFAR10
+- [ ] PR-ResNet110 on CIFAR100
 
+### Results
+
+#### MNIST
+
+| Method           | baseline | 0.2      | 0.4       | 0.6       | 0.8       | 1.0       |
+| ---------------- | -------- | -------- | --------- | --------- | --------- | --------- |
+| LeNet-5          | 98.6     | 92.7/7.1 | 33.9/66.0 | 14.1/85.9 | 7.9/92.2  | 8.2/91.7  |
+| PR-LeNet-5       | 98.2     | 94.8/4.6 | 93.3/6.0  | 87.7/11.7 | 53.2/46.4 | 50.1/50.1 |
+| LeNet-5(ours)    | 98.5     | 95.3/4.0 | 71.5/32.0 | 61.5/46.0 | 51.9/56.0 | 65.4/40.0 |
+| PR-LeNet-5(ours) | -        | -        | -         | -         | -         | -         |
+
+
+#### CIFAR10
+
+| Method         | baseline | 0.04      |
+| -------------- | -------- | --------- |
+| ResNet-32       | 92.7     | 55.3/44.4 |
+| PR-ResNet-32    | 89.3     | 87.3/7.1  |
+| ResNet-32(ours) | 93.3     | -         |
+
+#### CIFAR100
+
+| Method          | baseline | 0.02      |
+| --------------- | -------- | --------- |
+| ResNet-110       | 71.6     | 45.5/49.8 |
+| PR-ResNet-110    | 66.4     | 61.5/23.7 |
+| ResNet-110(ours) | 68.8     | -         |
 
 
 ### Evaluation

@@ -158,7 +158,9 @@ class UniversalPerturbation(Attack):
                     # If the class has changed, update v
                     if fk_i_hat != adv_fk_i_hat:
                         v += adv_xi - xi
+                        v *= 255
                         v = projection(v, self.eps, self.norm)
+                        v /= 255
             nb_iter += 1
 
             # Compute the error rate
